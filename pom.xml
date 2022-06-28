@@ -1,0 +1,122 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.dma.spark.gpu</groupId>
+    <artifactId>gpu-spark-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>${project.artifactId}</name>
+    <description>Example GPU Scala Spark App</description>
+    <properties>
+        <encoding>UTF-8</encoding>
+        <spark.version>3.1.1</spark.version>
+        <scala.version>2.12.8</scala.version>
+        <scala.compat.version>2.12</scala.compat.version>
+    </properties>
+
+    <dependencies>
+        <!-- Scala lang, spark core and spark sql are all
+             scoped as provided as spark-submit will provide these -->
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.compat.version}</artifactId>
+            <version>${spark.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.typesafe</groupId>
+            <artifactId>config</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ai.rapids</groupId>
+            <artifactId>cudf</artifactId>
+            <version>22.0.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/cudf-22.04.0-cuda11.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>ai.rapids-spark</groupId>
+            <artifactId>rapids-4-spark_${scala.compat.version}</artifactId>
+            <version>22.0.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/rapids-4-spark_2.12-22.04.0.jar</systemPath>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>ai.rapids</groupId>-->
+<!--            <artifactId>xgboost4j_2.x</artifactId>-->
+<!--            <version>1.0.0-Beta5</version>-->
+<!--        </dependency>-->
+
+<!--        <dependency>-->
+<!--            <groupId>ai.rapids</groupId>-->
+<!--            <artifactId>xgboost4j-spark_2.x</artifactId>-->
+<!--            <version>1.0.0-Beta5</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+
+
+
+<!--        <dependency>-->
+<!--            <groupId>ml.dmlc</groupId>-->
+<!--            <artifactId>xgboost4j-spark_2.12</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
+    </dependencies>
+
+    <build>
+        <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
+        <plugins>
+            <!-- enable scalatest -->
+            <!--            <plugin>-->
+            <!--                <groupId>org.scalatest</groupId>-->
+            <!--                <artifactId>scalatest-maven-plugin</artifactId>-->
+            <!--                <version>2.0.0</version>-->
+            <!--                <configuration>-->
+            <!--                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>-->
+            <!--                    <suites>com.etech.datalake.SparkTest</suites>-->
+            <!--                    <junitxml>.</junitxml>-->
+            <!--                    <filereports>WDF TestSuite.txt</filereports>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>test</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>test</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
+            <!-- disable surefire -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <useFile>false</useFile>
+                    <disableXmlReport>true</disableXmlReport>
+                    <includes>
+                        <include>**/*Test.*</include>
+                        <include>**/*Suite.*</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!-- Use the shade plugin to remove all the provided artifacts (such as spark itself) from the jar -->
+
+        </plugins>
+    </build>
+</project>
